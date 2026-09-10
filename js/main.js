@@ -5,9 +5,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
     ui.renderizarPensamentos()
 
     const formularioPensamento = document.getElementById("pensamento-form")
+    const botaoCancelar = document.getElementById("botao-cancelar")
+
     formularioPensamento.addEventListener("submit", manipularSubmissaoFormulario)
+    botaoCancelar.addEventListener("click", manipularCancelamento)
+    
 
 })
+
+function manipularCancelamento() {
+  ui.limparFormulario()
+}
 
 async function manipularSubmissaoFormulario(event) {
     event.preventDefault()
@@ -19,8 +27,10 @@ async function manipularSubmissaoFormulario(event) {
     try {
         if(id){
             await api.editarPensamento({id, conteudo, autoria})
+            manipularCancelamento()
         } else {
             await api.salvarPensamento({conteudo, autoria})
+            manipularCancelamento()
         }
          ui.renderizarPensamentos()
     } catch {
@@ -28,12 +38,3 @@ async function manipularSubmissaoFormulario(event) {
     }
 
 }
-
-    const cancelar = document.getElementById("botao-cancelar")
-    cancelar.addEventListener("click", () => {
-        let conteudo = document.getElementById("pensamento-conteudo")
-        let autoria = document.getElementById("pensamento-autoria")
-
-        conteudo.value = ""
-        autoria.value = ""
-    })
